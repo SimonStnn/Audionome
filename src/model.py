@@ -1,0 +1,124 @@
+import io
+import pickle
+import librosa as lr
+import numpy as np
+import pandas as pd
+
+# from sklearn.preprocessing import StandardScaler
+
+from utils import MAX_AUDIO_LENGTH, trim_audio, validate_audio_length
+
+# Load the scaler
+scaler = pickle.load(open("standard_scaler.sav", "rb"))
+
+# Load the model
+model_name = "svm_final_model.sav"
+model = pickle.load(open(model_name, "rb"))
+
+# Load the label encoder
+label_encoder = pickle.load(open("label_encoder.sav", "rb"))
+
+
+def predict(audio_sample: bytes):
+    """
+    Predicts the genre of the given audio sample.
+    """
+    # if not validate_audio_length(audio_sample):
+    #     audio_sample = trim_audio(audio_sample, start=0, end=MAX_AUDIO_LENGTH, file_format="wav")
+
+    audio_file = io.BytesIO(audio_sample)
+    y, sr = lr.load(audio_file)
+
+    # Length feauture
+    # length = len(y)
+
+    # Chroma STFT
+    chroma_stft = lr.feature.chroma_stft(y=y, sr=sr)
+    chroma_stft_mean = np.mean(chroma_stft)
+    chroma_stft_var = np.var(chroma_stft)
+
+    # RMS (Root Mean Square)
+    rms = lr.feature.rms(y=y)
+    rms_mean = np.mean(rms)
+    rms_var = np.var(rms)
+
+    # Spectral Centroid
+    spectral_centroid = lr.feature.spectral_centroid(y=y, sr=sr)
+    spectral_centroid_mean = np.mean(spectral_centroid)
+    spectral_centroid_var = np.var(spectral_centroid)
+
+    # Spectral Bandwidth
+    spectral_bandwidth = lr.feature.spectral_bandwidth(y=y, sr=sr)
+    spectral_bandwidth_mean = np.mean(spectral_bandwidth)
+    spectral_bandwidth_var = np.var(spectral_bandwidth)
+
+    # Spectral Rolloff
+    rolloff = lr.feature.spectral_rolloff(y=y, sr=sr)
+    rolloff_mean = np.mean(rolloff)
+    rolloff_var = np.var(rolloff)
+
+    # Zero Crossing Rate
+    zero_crossing_rate = lr.feature.zero_crossing_rate(y)
+    zero_crossing_rate_mean = np.mean(zero_crossing_rate)
+    zero_crossing_rate_var = np.var(zero_crossing_rate)
+
+    # Harmony and Percussive components
+    harmony, perceptr = lr.effects.hpss(y)
+    harmony_mean = np.mean(harmony)
+    harmony_var = np.var(harmony)
+    perceptr_mean = np.mean(perceptr)
+    perceptr_var = np.var(perceptr)
+
+    # Tempo
+    onset_env = lr.onset.onset_strength(y=y, sr=sr)
+    tempo = lr.beat.tempo(onset_envelope=onset_env, sr=sr)
+
+    # MFCC (Mel-Frequency Cepstral Coefficients)
+    mfccs = lr.feature.mfcc(y=y, sr=sr, n_mfcc=20)
+
+    mfcc_means = []
+    mfcc_vars = []
+    for i in range(1, 21):  # MFCC 1-20
+        mfcc_means.append(np.mean(mfccs[i - 1]))
+        mfcc_vars.append(np.var(mfccs[i - 1]))
+
+    # Extract features
+    features = {
+        "chroma_stft_mean": chroma_stft_mean,
+        "chroma_stft_var": chroma_stft_var,
+        "rms_mean": rms_mean,
+        "rms_var": rms_var,
+        "spectral_centroid_mean": spectral_centroid_mean,
+        "spectral_centroid_var": spectral_centroid_var,
+        "spectral_bandwidth_mean": spectral_bandwidth_mean,
+        "spectral_bandwidth_var": spectral_bandwidth_var,
+        "rolloff_mean": rolloff_mean,
+        "rolloff_var": rolloff_var,
+        "zero_crossing_rate_mean": zero_crossing_rate_mean,
+        "zero_crossing_rate_var": zero_crossing_rate_var,
+        "harmony_mean": harmony_mean,
+        "harmony_var": harmony_var,
+        "perceptr_mean": perceptr_mean,
+        "perceptr_var": perceptr_var,
+        "tempo": tempo,
+    }
+
+    # Add MFCC features
+    for i in range(1, 21):
+        features[f"mfcc{i}_mean"] = mfcc_means[i - 1]
+        features[f"mfcc{i}_var"] = mfcc_vars[i - 1]
+
+    # Print features
+    for key, value in features.items():
+        print(f"{key}: {value}")
+
+    # Create a DataFrame
+    features_df = pd.DataFrame([features])
+
+    features_df_scaled = scaler.transform(features_df)
+
+    # Predict the genre
+    prediction = model.predict(features_df_scaled)
+    predicted_genre = label_encoder.inverse_transform(prediction)[0]
+    print(f"The predicted genre is: {predicted_genre}")
+    return predicted_genre
