@@ -121,4 +121,4 @@ def predict(audio_sample: bytes):
     prediction = model.predict(features_df_scaled)
     predicted_genre = label_encoder.inverse_transform(prediction)[0]
     print(f"The predicted genre is: {predicted_genre}")
-    return predicted_genre
+    return str(predicted_genre)
