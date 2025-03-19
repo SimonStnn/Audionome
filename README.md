@@ -139,7 +139,10 @@ The logistic regression model that is used in the Scikit-Learn library has sever
 be set to 'newton-cg', 'lbfgs', 'liblinear', 'sag', or 'saga'.
 
 ### Stochastic gradient descent classifier
-
+The stochastic gradient descent (SGD) classifier is a linear classifier that uses stochastic gradient descent to optimize the loss function. It is suitable for large-scale machine learning problems and can be used for both binary and multi-class classification tasks. The SGD classifier has several hyperparameters that can be tuned to improve performance. Some of the key hyperparameters include:
+- loss: This hyperparameter specifies the loss function to be optimized. It can be set to 'hinge', 'log_loss', 'modified_huber', 'squared_hinge', 'perceptron', or 'squared_loss'.
+- penalty: This hyperparameter specifies the norm used in the penalization term. It can be set to 'l1', 'l2', or 'elasticnet'.
+- learning_rate: This hyperparameter specifies the learning rate schedule. It can be set to 'constant', 'optimal', 'invscaling', or 'adaptive'.
 
 
 ## Tools
