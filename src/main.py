@@ -31,30 +31,32 @@ def main() -> None:
     for col, i in zip(st.columns(GENRE_COLS), range(0, len(genres), GENRE_ROWS)):
         txt: list[str] = []
         for j, genre in enumerate(genres[i : i + GENRE_ROWS]):
-            txt.append(f"{i + j + 1}. {genre}")
+            txt.append(f"{i + j + 1}. {genre.capitalize()}")
         col.write("\n".join(txt))
 
-    st.divider()
+    st.write("###")
+    # st.divider()
 
-    st.write(
-        """
-        **Upload** a music file or **select** a sample and we'll classify it into a genre! 
-        """
-    )
+    # st.write(
+    #     """
+    #     **Upload** a music file or **select** a sample and we'll classify it into a genre!
+    #     """
+    # )
 
     file: UploadedFile | bytes | None = None
-    left_column, right_column = st.columns(2, border=True)
-    with left_column:
+    upload_tab, select_tab, input_tab = st.tabs(["Upload", "Select", "Input"])
+    with upload_tab:
         file = st.file_uploader(
             label="Upluad an audio sample",
             key="file_uploader",
             type=["mp3", "wav"],
             disabled=file is not None,
         )
-    with right_column:
+    with select_tab:
         # Grab 10 random files from dataset
         files: dict[str, str] = generate_sample_dict(
-            DATASET_PATH, lambda x: f"{x.split('.', 1)[0]} {int(x.split('.', 2)[1])}"
+            DATASET_PATH,
+            lambda x: f"{x.split('.', 1)[0].capitalize()} {int(x.split('.', 2)[1])}",
         )
 
         select = st.selectbox(
@@ -63,6 +65,8 @@ def main() -> None:
             index=None,
             disabled=file is not None,
         )
+    with input_tab:
+        file = st.audio_input("Record audio")
 
     if select is not None:
         selected_path = files[select]
@@ -87,8 +91,18 @@ def main() -> None:
         st.audio(raw_file)
 
         start_time = time.time()
-        with st.spinner("Processing..."):
-            prediction = predict(raw_file)
+
+        predictor = predict(raw_file)
+
+        try:
+            while True:
+                with st.spinner("Processing..."):
+                    prediction = next(predictor)
+                st.line_chart(prediction.T)
+                st.scatter_chart(prediction.T)
+        except StopIteration as e:
+            prediction = str(e.value)
+
         end_time = time.time()
 
         st.balloons()
@@ -96,17 +110,12 @@ def main() -> None:
         st.success(
             f"""
             Predicted genre: \n
-            $\\textbf{{\\huge {prediction[0].upper() + prediction[1:]}}}$
+            $\\textbf{{\\huge {prediction.capitalize()}}}$
             """,
             icon="🔥",
         )
 
         st.info(f"Prediction took {end_time - start_time:.2f} seconds")
-
-    # dataframe = pd.DataFrame(
-    #     np.random.randn(10, 20), columns=["col %d" % i for i in range(20)]
-    # )
-    # st.dataframe(dataframe.style.highlight_max(axis=0))
 
 
 if __name__ == "__main__":

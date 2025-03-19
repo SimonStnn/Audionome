@@ -23,14 +23,9 @@ def predict(audio_sample: bytes):
     """
     Predicts the genre of the given audio sample.
     """
-    # if not validate_audio_length(audio_sample):
-    #     audio_sample = trim_audio(audio_sample, start=0, end=MAX_AUDIO_LENGTH, file_format="wav")
 
     audio_file = io.BytesIO(audio_sample)
     y, sr = lr.load(audio_file)
-
-    # Length feauture
-    # length = len(y)
 
     # Chroma STFT
     chroma_stft = lr.feature.chroma_stft(y=y, sr=sr)
@@ -108,14 +103,12 @@ def predict(audio_sample: bytes):
         features[f"mfcc{i}_mean"] = mfcc_means[i - 1]
         features[f"mfcc{i}_var"] = mfcc_vars[i - 1]
 
-    # Print features
-    for key, value in features.items():
-        print(f"{key}: {value}")
-
     # Create a DataFrame
     features_df = pd.DataFrame([features])
+    yield features_df
 
     features_df_scaled = scaler.transform(features_df)
+    yield features_df_scaled
 
     # Predict the genre
     prediction = model.predict(features_df_scaled)
