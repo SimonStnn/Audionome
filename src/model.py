@@ -1,3 +1,4 @@
+import os
 import io
 import pickle
 import librosa as lr
@@ -8,15 +9,19 @@ import pandas as pd
 
 from utils import MAX_AUDIO_LENGTH, trim_audio, validate_audio_length
 
+MODEL_DIR = 'models'
+if not os.path.exists(MODEL_DIR):
+    os.makedirs(MODEL_DIR)
+
 # Load the scaler
-scaler = pickle.load(open("standard_scaler.sav", "rb"))
+scaler = pickle.load(open(os.path.join(MODEL_DIR, "standard_scaler.sav"), "rb"))
 
 # Load the model
-model_name = "svm_final_model.sav"
+model_name = os.path.join(MODEL_DIR, "svm_final_model.sav")
 model = pickle.load(open(model_name, "rb"))
 
 # Load the label encoder
-label_encoder = pickle.load(open("label_encoder.sav", "rb"))
+label_encoder = pickle.load(open(os.path.join(MODEL_DIR, "label_encoder.sav"), "rb"))
 
 
 def predict(audio_sample: bytes):
