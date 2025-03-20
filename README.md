@@ -14,9 +14,9 @@ An AI-powered music genre classification system developed by [Simon Stijnen](htt
     - [Data preprocessing](#data-preprocessing) 
     - [Model selection](#model-selection)
         - [Logistic regression](#logistic-regression)
-        - [Stochastic gradient descent](#stochastic-gradient-descent)
+        - [Stochastic gradient descent classifier](#stochastic-gradient-descent-classifier)
         - [Random forest](#random-forest)
-        - [Support vector machine](#support-vector-machine)
+        - [Support vector classifier](#support-vector-classifier)
         - [K-nearest neighbors](#k-nearest-neighbors)
         - [Decision tree](#decision-tree)
         - [Gradient boosting](#gradient-boosting)
@@ -143,6 +143,15 @@ The stochastic gradient descent (SGD) classifier is a linear classifier that use
 - loss: This hyperparameter specifies the loss function to be optimized. It can be set to 'hinge', 'log_loss', 'modified_huber', 'squared_hinge', 'perceptron', or 'squared_loss'.
 - penalty: This hyperparameter specifies the norm used in the penalization term. It can be set to 'l1', 'l2', or 'elasticnet'.
 - learning_rate: This hyperparameter specifies the learning rate schedule. It can be set to 'constant', 'optimal', 'invscaling', or 'adaptive'.
+
+### Random forest classifier
+The random forest classifier is an ensemble learning method that combines multiple decision trees to improve performance. It is suitable for both binary and multi-class classification tasks and can handle large datasets with high dimensionality. The random forest classifier has several hyperparameters that can be tuned to improve performance. Some of the key hyperparameters include:
+- n_estimators: This hyperparameter specifies the number of trees in the forest. A larger number of trees can improve performance but may increase training time.
+- max_depth: This hyperparameter specifies the maximum depth of the trees in the forest. A larger maximum depth can lead to overfitting.
+- min_samples_split: This hyperparameter specifies the minimum number of samples required to split an internal node. A smaller value can lead to overfitting.
+
+### Support vector classifier
+The support vector classifier 
 
 
 ## Tools
