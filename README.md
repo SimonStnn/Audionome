@@ -151,8 +151,26 @@ The random forest classifier is an ensemble learning method that combines multip
 - min_samples_split: This hyperparameter specifies the minimum number of samples required to split an internal node. A smaller value can lead to overfitting.
 
 ### Support vector classifier
-The support vector classifier 
+The support vector classifier (SVC) is a supervised machine learning algorithm used for classification tasks. It is suitable for both binary and multi-class classification problems and can handle large datasets with high dimensionality. The SVC algorithm has several hyperparameters that can be tuned to improve performance. Some of the key hyperparameters include:
+- C: This hyperparameter specifies the regularization parameter. A smaller value of C indicates stronger regularization.
+- kernel: This hyperparameter specifies the kernel function used for mapping the input data into a higher-dimensional space. It can be set to 'linear', 'poly', 'rbf', 'sigmoid', or 'precomputed'.
+- gamma: This hyperparameter specifies the kernel coefficient for 'rbf', 'poly', and 'sigmoid' kernels. A smaller value of gamma indicates a larger influence of the training samples.
 
+### K-nearest neighbors
+The k-nearest neighbors (KNN) algorithm is a simple and intuitive machine learning algorithm used for classification tasks. It classifies data points based on the majority class of their k nearest neighbors. The KNN algorithm has one hyperparameter that can be tuned to improve performance:
+- n_neighbors: This hyperparameter specifies the number of neighbors used for classification. A larger number of neighbors can improve performance but may increase computational cost.
+- weights: This hyperparameter specifies the weight function used for prediction. It can be set to 'uniform' or 'distance'.
+
+### Decision tree
+The decision tree algorithm is a supervised machine learning algorithm used for classification tasks. It builds a tree-like structure to represent the decision process and classify data points. The decision tree algorithm has several hyperparameters that can be tuned to improve performance. Some of the key hyperparameters include:
+- criterion: This hyperparameter specifies the criterion used for splitting nodes. It can be set to 'gini' or 'entropy'.
+- max_depth: This hyperparameter specifies the maximum depth of the tree. A larger maximum depth can lead to overfitting.
+- min_samples_split: This hyperparameter specifies the minimum number of samples required to split an internal node. A smaller value can lead to overfitting.
+
+### Gradient boosting
+The gradient boosting algorithm is an ensemble learning method that combines multiple weak learners to improve performance. It is suitable for both regression and classification tasks and can handle large datasets with high dimensionality. The gradient boosting algorithm has several hyperparameters that can be tuned to improve performance. Some of the key hyperparameters include:
+- n_estimators: This hyperparameter specifies the number of boosting stages. A larger number of boosting stages can improve performance but may increase training time.
+- learning_rate: This hyperparameter specifies the learning rate used for updating the weights of the weak learners. A smaller learning rate can improve generalization.
 
 ## Tools
 ### Technologies
@@ -186,4 +204,11 @@ To run our project, you will need to have Python version 3.12.9 installed on you
 - IPython <--version-->
 - Pickle <--version-->
 - Streamlit <--version-->
+
+# Results
+## Model Evaluation
+
+## Model Comparison
+
+## Model Secetion
 
