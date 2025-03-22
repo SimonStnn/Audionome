@@ -1,37 +1,35 @@
-import io
 import math
 import os
 import time
+from typing import Final
 import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-from model import predict, get_mfccs
-from utils import (
-    MAX_AUDIO_LENGTH,
-    generate_sample_dict,
-    trim_audio,
-    validate_audio_length,
-    get_genres,
-)
+from model import predict, get_mfccs, get_tempo
+from utils import generate_sample_dict, get_genres
 
-DATASET_PATH = os.path.join("dataset", "genres_original")
+DATASET_PATH: Final = os.path.join("dataset", "genres_original")
+GENRES: Final = get_genres(DATASET_PATH)
+GENRE_ROWS: Final = 3
+GENRE_COLS: Final = math.ceil(len(GENRES) / GENRE_ROWS)
 
 
 def main() -> None:
+    st.set_page_config(
+        page_title="Audionome",
+        page_icon="🎵",
+    )
+
     st.title("Audionome")
     st.caption("Classify music into genres")
 
     st.write("Available genres:")
 
     # Display the supported genres
-    genres = get_genres(DATASET_PATH)
-    GENRE_ROWS = 3
-    GENRE_COLS = math.ceil(len(genres) / GENRE_ROWS)
-
     # Split genres into columns and display
-    for col, i in zip(st.columns(GENRE_COLS), range(0, len(genres), GENRE_ROWS)):
+    for col, i in zip(st.columns(GENRE_COLS), range(0, len(GENRES), GENRE_ROWS)):
         txt: list[str] = []
-        for j, genre in enumerate(genres[i : i + GENRE_ROWS]):
+        for j, genre in enumerate(GENRES[i : i + GENRE_ROWS]):
             txt.append(f"{i + j + 1}. {genre.capitalize()}")
         col.write("\n".join(txt))
 
@@ -102,27 +100,28 @@ def main() -> None:
             """,
             icon="🔥",
         )
-        st.info(f"Prediction took {end_time - start_time:.2f} seconds")
+        st.info(f"Prediction took **{end_time - start_time:.2f} seconds**")
 
         st.balloons()
 
-        # Interpreting the prediction
-        st.write(
-            f"""
-            ## Interpretation
-            - **{prediction.capitalize()}** is the predicted genre.
-            - The model predicted this genre with a confidence of **{100:.2f}%** TODO.
-            - The prediction took **{end_time - start_time:.2f} seconds**.
-            """
-        )
+        st.divider()
 
-        st.write("## MFCCs")
+        # Interpreting the prediction
+        st.header("Interpretation")
+
+        with st.spinner("Calculating tempo..."):
+            cols = st.columns(3, border=True)
+            cols[0].metric("Prediction", prediction.capitalize())
+            cols[1].metric("Confidence", f"{100:.2f}%")
+            cols[2].metric("Tempo", f"{get_tempo(raw_file):.1f} BPM")
+
+        st.header("Mel-Frequency Cepstral Coefficients (MFCCs)")
         st.write(
             """
             Mel-frequency cepstral coefficients (MFCCs) are a feature widely used in automatic speech and speaker recognition. They were introduced by Davis and Mermelstein in the 1980's, and have been state-of-the-art ever since.
             """
         )
-        st.write(f"### Prediction for **{file_name}**:")
+        st.subheader(f"Prediction for **{file_name}**:")
         st.pyplot(get_mfccs(raw_file))
 
 

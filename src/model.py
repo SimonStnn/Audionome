@@ -118,7 +118,7 @@ def predict(audio_sample: bytes):
     return str(predicted_genre)
 
 
-def get_mfccs(content: bytes) -> plt.Figure:
+def get_mfccs(content: bytes) -> plt.Figure: # type: ignore
     """
     Extracts the Mel-Frequency Cepstral Coefficients (MFCC) from the given audio sample.
     """
@@ -130,3 +130,12 @@ def get_mfccs(content: bytes) -> plt.Figure:
     fig.colorbar(spec)
     plt.ylabel("MFCC Coefficients")
     return fig
+
+
+def get_tempo(content: bytes) -> float:
+    """
+    Extracts the tempo from the given audio sample.
+    """
+    y, sr = lr.load(io.BytesIO(content))
+    tempo, _ = lr.beat.beat_track(y=y, sr=sr)
+    return float(np.mean(tempo))
