@@ -10,4 +10,4 @@ COPY models/ models/
 COPY dataset/ dataset/
 COPY . .
 
-ENTRYPOINT ["streamlit", "run", "src/main.py", "--server.port=8501"]
+ENTRYPOINT ["streamlit", "run", "src/Audionome.py", "--server.port=8501"]
