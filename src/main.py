@@ -5,7 +5,7 @@ from typing import Final
 import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-from model import predict, get_mfccs, get_tempo
+from model import predict, get_mfccs, get_chroma_features, get_tempo
 from utils import generate_sample_dict, get_genres
 
 DATASET_PATH: Final = os.path.join("dataset", "genres_original")
@@ -122,7 +122,18 @@ def main() -> None:
             """
         )
         st.subheader(f"Prediction for **{file_name}**:")
-        st.pyplot(get_mfccs(raw_file))
+        with st.spinner("Extracting MFCCs..."):
+            st.pyplot(get_mfccs(raw_file))
+
+        st.header("Chroma Features")
+        st.write(
+            """
+            Chroma features are an interesting and powerful representation for music audio in which the entire spectrum is projected onto 12 bins representing the 12 distinct semitones (or chroma) of the musical octave.
+            """
+        )
+        st.subheader(f"Prediction for **{file_name}**:")
+        with st.spinner("Extracting chroma features..."):
+            st.pyplot(get_chroma_features(raw_file))
 
 
 if __name__ == "__main__":

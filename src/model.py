@@ -132,6 +132,19 @@ def get_mfccs(content: bytes) -> plt.Figure: # type: ignore
     return fig
 
 
+def get_chroma_features(content: bytes) -> plt.Figure: # type: ignore
+    """
+    Extracts the Chroma features from the given audio sample.
+    """
+    y, sr = lr.load(io.BytesIO(content))
+    chroma = lr.feature.chroma_stft(y=y, sr=sr)
+    fig = plt.figure(figsize=(14, 5))
+    spec = lr.display.specshow(chroma, y_axis="chroma", x_axis="time")
+    fig.colorbar(spec)
+    plt.ylabel("Chroma")
+    return fig
+
+
 def get_tempo(content: bytes) -> float:
     """
     Extracts the tempo from the given audio sample.
