@@ -4,12 +4,10 @@ import pickle
 import librosa as lr
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-# from sklearn.preprocessing import StandardScaler
 
-from utils import MAX_AUDIO_LENGTH, trim_audio, validate_audio_length
-
-MODEL_DIR = 'models'
+MODEL_DIR = "models"
 if not os.path.exists(MODEL_DIR):
     os.makedirs(MODEL_DIR)
 
@@ -110,13 +108,25 @@ def predict(audio_sample: bytes):
 
     # Create a DataFrame
     features_df = pd.DataFrame([features])
-    yield features_df
 
     features_df_scaled = scaler.transform(features_df)
-    yield features_df_scaled
 
     # Predict the genre
     prediction = model.predict(features_df_scaled)
     predicted_genre = label_encoder.inverse_transform(prediction)[0]
     print(f"The predicted genre is: {predicted_genre}")
     return str(predicted_genre)
+
+
+def get_mfccs(content: bytes) -> plt.Figure:
+    """
+    Extracts the Mel-Frequency Cepstral Coefficients (MFCC) from the given audio sample.
+    """
+    y, sr = lr.load(io.BytesIO(content))
+    mfccs = lr.feature.mfcc(y=y, sr=sr, n_mfcc=20)
+    mfccs_normalized = lr.util.normalize(mfccs, axis=1)
+    fig = plt.figure(figsize=(14, 5))
+    spec = lr.display.specshow(mfccs_normalized, x_axis="time")
+    fig.colorbar(spec)
+    plt.ylabel("MFCC Coefficients")
+    return fig
