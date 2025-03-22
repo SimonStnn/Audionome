@@ -1,0 +1,12 @@
+name: audionome
+
+services:
+  audionome:
+    container_name: audionome
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
