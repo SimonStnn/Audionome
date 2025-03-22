@@ -1,10 +1,11 @@
+import io
 import math
 import os
 import time
 import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-from model import predict
+from model import predict, get_mfccs
 from utils import (
     MAX_AUDIO_LENGTH,
     generate_sample_dict,
@@ -35,43 +36,42 @@ def main() -> None:
         col.write("\n".join(txt))
 
     st.write("###")
-    # st.divider()
 
-    # st.write(
-    #     """
-    #     **Upload** a music file or **select** a sample and we'll classify it into a genre!
-    #     """
-    # )
-
-    file: UploadedFile | bytes | None = None
     upload_tab, select_tab, input_tab = st.tabs(["Upload", "Select", "Input"])
+
     with upload_tab:
-        file = st.file_uploader(
-            label="Upluad an audio sample",
+        upload_file = st.file_uploader(
+            label="Upload an audio sample",
             key="file_uploader",
             type=["mp3", "wav"],
-            disabled=file is not None,
+            on_change=lambda: print("now"),
         )
+        upload_file_name = upload_file.name if upload_file is not None else None
+
     with select_tab:
-        # Grab 10 random files from dataset
         files: dict[str, str] = generate_sample_dict(
             DATASET_PATH,
             lambda x: f"{x.split('.', 1)[0].capitalize()} {int(x.split('.', 2)[1])}",
         )
 
+        select_file: bytes | None = None
         select = st.selectbox(
             "Select a sample",
             list(files.keys()),
             index=None,
-            disabled=file is not None,
         )
-    with input_tab:
-        file = st.audio_input("Record audio")
+        if select is not None:
+            selected_path = files[select]
+            with open(selected_path, "rb") as f:
+                select_file = f.read()
+        select_file_name = select if select is not None else None
 
-    if select is not None:
-        selected_path = files[select]
-        with open(selected_path, "rb") as f:
-            file = f.read()
+    with input_tab:
+        input_file = st.audio_input("Record audio")
+        input_file_name = "input" if input_file is not None else None
+
+    file = upload_file or select_file or input_file
+    file_name = upload_file_name or select_file_name or input_file_name
 
     if file is not None:
         st.write("File uploaded!")
@@ -91,31 +91,39 @@ def main() -> None:
         st.audio(raw_file)
 
         start_time = time.time()
-
-        predictor = predict(raw_file)
-
-        try:
-            while True:
-                with st.spinner("Processing..."):
-                    prediction = next(predictor)
-                st.line_chart(prediction.T)
-                st.scatter_chart(prediction.T)
-        except StopIteration as e:
-            prediction = str(e.value)
-
+        with st.spinner(f"Predicting genre for `{file_name}`..."):
+            prediction = predict(raw_file)
         end_time = time.time()
-
-        st.balloons()
 
         st.success(
             f"""
-            Predicted genre: \n
+            Predicted genre for `{file_name}`: \n
             $\\textbf{{\\huge {prediction.capitalize()}}}$
             """,
             icon="🔥",
         )
-
         st.info(f"Prediction took {end_time - start_time:.2f} seconds")
+
+        st.balloons()
+
+        # Interpreting the prediction
+        st.write(
+            f"""
+            ## Interpretation
+            - **{prediction.capitalize()}** is the predicted genre.
+            - The model predicted this genre with a confidence of **{100:.2f}%** TODO.
+            - The prediction took **{end_time - start_time:.2f} seconds**.
+            """
+        )
+
+        st.write("## MFCCs")
+        st.write(
+            """
+            Mel-frequency cepstral coefficients (MFCCs) are a feature widely used in automatic speech and speaker recognition. They were introduced by Davis and Mermelstein in the 1980's, and have been state-of-the-art ever since.
+            """
+        )
+        st.write(f"### Prediction for **{file_name}**:")
+        st.pyplot(get_mfccs(raw_file))
 
 
 if __name__ == "__main__":
