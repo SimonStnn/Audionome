@@ -1,0 +1,106 @@
+[client]
+
+# Controls whether uncaught app exceptions and deprecation warnings
+# are displayed in the browser. This can be one of the following:
+# - "full"       : In the browser, Streamlit displays app deprecation
+#                  warnings and exceptions, including exception types,
+#                  exception messages, and associated tracebacks.
+# - "stacktrace" : In the browser, Streamlit displays exceptions,
+#                  including exception types, generic exception messages,
+#                  and associated tracebacks. Deprecation warnings and
+#                  full exception messages will only print to the
+#                  console.
+# - "type"       : In the browser, Streamlit displays exception types and
+#                  generic exception messages. Deprecation warnings, full
+#                  exception messages, and associated tracebacks only
+#                  print to the console.
+# - "none"       : In the browser, Streamlit displays generic exception
+#                  messages. Deprecation warnings, full exception
+#                  messages, associated tracebacks, and exception types
+#                  will only print to the console.
+# - True         : This is deprecated. Streamlit displays "full"
+#                  error details.
+# - False        : This is deprecated. Streamlit displays "stacktrace"
+#                  error details.
+# Default: "full"
+showErrorDetails = "type"
+
+# Change the visibility of items in the toolbar, options menu,
+# and settings dialog (top right of the app).
+# Allowed values:
+# - "auto"      : Show the developer options if the app is accessed through
+#                 localhost or through Streamlit Community Cloud as a developer.
+#                 Hide them otherwise.
+# - "developer" : Show the developer options.
+# - "viewer"    : Hide the developer options.
+# - "minimal"   : Show only options set externally (e.g. through
+#                 Streamlit Community Cloud) or through st.set_page_config.
+#                 If there are no options left, hide the menu.
+# Default: "auto"
+toolbarMode = "viewer"
+
+
+[server]
+
+# Symmetric key used to produce signed cookies. If deploying on multiple
+# replicas, this should be set to the same value across all replicas to ensure
+# they all share the same secret.
+# Default: randomly generated secret key.
+cookieSecret = "a-random-key-appears-here"
+
+# If false, will attempt to open a browser window on start.
+# Default: false unless (1) we are on a Linux box where DISPLAY is unset, or
+# (2) we are running in the Streamlit Atom plugin.
+headless = true
+
+# The port where the server will listen for browser connections.
+# Don't use port 3000 which is reserved for internal development.
+# Default: 8501
+# port = 8501
+
+# Enable serving files from a `static` directory in the running app's
+# directory.
+# Default: false
+enableStaticServing = true
+
+[browser]
+
+# Whether to send usage statistics to Streamlit.
+# Default: true
+gatherUsageStats = false
+
+# Port where users should point their browsers in order to connect to the
+# app.
+# This is used to:
+# - Set the correct URL for XSRF protection purposes.
+# - Show the URL on the terminal (part of `streamlit run`).
+# - Open the browser automatically (part of `streamlit run`).
+# This option is for advanced use cases. To change the port of your app, use
+# `server.Port` instead. Don't use port 3000 which is reserved for internal
+# development.
+# Default: whatever value is set in server.port.
+# serverPort = 8501
+
+
+[theme]
+
+# The preset Streamlit theme that your custom theme inherits from.
+# One of "light" or "dark".
+base = "dark"
+
+# Primary accent color for interactive elements.
+primaryColor = "#4162d2"
+
+# Background color for the main content area.
+backgroundColor = "#fdfbf6"
+
+# Background color used for the sidebar and most interactive widgets.
+secondaryBackgroundColor = "#f7f1dd"
+
+# Color used for almost all text.
+textColor = "#122620"
+
+# The font family for all text in the app, except code blocks. One of
+# "sans serif", "serif", or "monospace".
+# To use a custom font, it needs to be added via [theme.fontFaces]. 🐰🥚
+font = "serif"
