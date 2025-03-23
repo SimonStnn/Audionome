@@ -1,37 +1,36 @@
 # Audionome
 An AI-powered music genre classification system developed by [Simon Stijnen](https://github.com/SimonStnn) and [Lynn Delaere](https://github.com/LynnDelaere), for the course AI Machine Learning at VIVES University of Applied Sciences.
 
-![DALLEImage](/assets/DALLEImage.webp)
+![DALLEImage](/app/static/DALLEImage.webp)
 
 # Table of contents
+- [Audionome](#audionome)
+- [Table of contents](#table-of-contents)
 - [Objectives](#objectives)
-    - [Main objective](#main-objective)
-    - [Sub-objectives](#sub-objectives)
+  - [Main objective](#main-objective)
+  - [Sub-objectives](#sub-objectives)
 - [Problem statement](#problem-statement)
 - [Analysis](#analysis)
-    - [Preliminary research](#preliminary-research)
-    - [Data collection](#data-collection)
-    - [Data preprocessing](#data-preprocessing) 
-    - [Model selection](#model-selection)
-        - [Logistic regression](#logistic-regression)
-        - [Stochastic gradient descent classifier](#stochastic-gradient-descent-classifier)
-        - [Random forest](#random-forest)
-        - [Support vector classifier](#support-vector-classifier)
-        - [K-nearest neighbors](#k-nearest-neighbors)
-        - [Decision tree](#decision-tree)
-        - [Gradient boosting](#gradient-boosting)
-    - [Tools](#tools)
-        - [Technologies](#technologies)
-        - [Libraries](#libraries)
-        - [Hardware requirements](#hardware-requirements)
-        - [Software requirements](#software-requirements)
+  - [Preliminary research](#preliminary-research)
+  - [Data collection](#data-collection)
+  - [Data preprocessing](#data-preprocessing)
+  - [Model selection](#model-selection)
+    - [Logistic regression](#logistic-regression)
+    - [Stochastic gradient descent classifier](#stochastic-gradient-descent-classifier)
+    - [Random forest classifier](#random-forest-classifier)
+    - [Support vector classifier](#support-vector-classifier)
+    - [K-nearest neighbors](#k-nearest-neighbors)
+    - [Decision tree](#decision-tree)
+    - [Gradient boosting](#gradient-boosting)
+  - [Tools](#tools)
+    - [Technologies](#technologies)
+    - [Libraries](#libraries)
+    - [Hardware requirements](#hardware-requirements)
+    - [Software requirements](#software-requirements)
 - [Results](#results)
-    - [Model evaluation](#model-evaluation)
-    - [Model comparison](#model-comparison)
-    - [Model selection](#model-selection)
-- [Extensions](#extensions)
-- [Conclusion](#conclusion)
-- [References](#references)
+  - [Model Evaluation](#model-evaluation)
+  - [Model Comparison](#model-comparison)
+  - [Model Secetion](#model-secetion)
 
 # Objectives
 ## Main objective
@@ -85,7 +84,7 @@ Due to the fact that we are using an existing dataset we don't need to extract t
 
 We made a correlation matrix to see how the features are related to each other. This helped us understand which features are most important for classifying music by genre. 
 
-![CorrelationMatrix](/assets/correlationMatrix.png)
+![CorrelationMatrix](/app/static/correlationMatrix.png)
 
 Key observations:
 - The diagonal of the correlation matrix shows that each feature is perfectly correlated with itself.
@@ -112,7 +111,7 @@ After standardization, we will apply PCA to the data. We will use the PCA class 
 - The eigenvectors are sorted by their corresponding eigenvalues in descending order.
 - The data is projected onto the principal components.
 
-![PCA](/assets/PCAPlot.png)
+![PCA](/app/static/PCAPlot.png)
 
 The PCA plot shows that most of the data is clustered together, some genres are more spread out than others. This suggests that these genres have more variability in their features. In the middle of the plot, more genres are clustered together, indicating that they share similar features.
 

@@ -6,8 +6,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY models/ models/
-COPY dataset/ dataset/
 COPY . .
 
-ENTRYPOINT ["streamlit", "run", "src/Audionome.py", "--server.port=8501"]
+ENTRYPOINT ["streamlit", "run", "app/Audionome.py", "--server.port=8501"]
