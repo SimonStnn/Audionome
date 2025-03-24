@@ -13,6 +13,11 @@ GENRES: Final = get_genres(DATASET_PATH)
 GENRE_ROWS: Final = 3
 GENRE_COLS: Final = math.ceil(len(GENRES) / GENRE_ROWS)
 
+TABS_KEY: Final = "selected_tab"
+TAB_STATE_UPLOAD: Final = 0
+TAB_STATE_SELECT: Final = 1
+TAB_STATE_INPUT: Final = 2
+
 st.set_page_config(
     page_title="Audionome",
     page_icon="🎵",
@@ -30,6 +35,17 @@ st.sidebar.header("Available genres")
 st.sidebar.write("\n".join(f"1. **{genre.capitalize()}**" for genre in GENRES))
 
 
+def get_selected_tab() -> int:
+    return st.session_state[TABS_KEY]
+
+
+def set_selected_tab(tab: int) -> None:
+    st.session_state[TABS_KEY] = tab
+
+
+if TABS_KEY not in st.session_state:
+    set_selected_tab(TAB_STATE_UPLOAD)
+
 upload_tab, select_tab, input_tab = st.tabs(["Upload", "Select", "Input"])
 
 with upload_tab:
@@ -37,7 +53,7 @@ with upload_tab:
         label="Upload an audio sample",
         key="file_uploader",
         type=["mp3", "wav"],
-        on_change=lambda: print("now"),
+        on_change=lambda: set_selected_tab(TAB_STATE_UPLOAD),
     )
     upload_file_name = upload_file.name if upload_file is not None else None
 
@@ -52,6 +68,7 @@ with select_tab:
         "Select a sample",
         list(files.keys()),
         index=None,
+        on_change=lambda: set_selected_tab(TAB_STATE_SELECT),
     )
     if select is not None:
         selected_path = files[select]
@@ -60,11 +77,22 @@ with select_tab:
     select_file_name = select if select is not None else None
 
 with input_tab:
-    input_file = st.audio_input("Record audio")
-    input_file_name = "input" if input_file is not None else None
+    input_file = st.audio_input(
+        "Record audio",
+        on_change=lambda: set_selected_tab(TAB_STATE_INPUT),
+    )
+    input_file_name = "Recorded audio" if input_file is not None else None
 
-file = upload_file or select_file or input_file
-file_name = upload_file_name or select_file_name or input_file_name
+file = (
+    upload_file
+    if get_selected_tab() == TAB_STATE_UPLOAD
+    else select_file if get_selected_tab() == TAB_STATE_SELECT else input_file
+)
+file_name = (
+    upload_file_name
+    if get_selected_tab() == TAB_STATE_UPLOAD
+    else select_file_name if get_selected_tab() == TAB_STATE_SELECT else input_file_name
+)
 
 if file is not None:
     st.write("File uploaded!")
