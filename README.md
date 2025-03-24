@@ -22,15 +22,16 @@ An AI-powered music genre classification system developed by [Simon Stijnen](htt
     - [K-nearest neighbors](#k-nearest-neighbors)
     - [Decision tree](#decision-tree)
     - [Gradient boosting](#gradient-boosting)
-  - [Tools](#tools)
-    - [Technologies](#technologies)
-    - [Libraries](#libraries)
-    - [Hardware requirements](#hardware-requirements)
-    - [Software requirements](#software-requirements)
 - [Results](#results)
   - [Model Evaluation](#model-evaluation)
-  - [Model Comparison](#model-comparison)
   - [Model Secetion](#model-secetion)
+- [Tools](#tools)
+  - [Technologies](#technologies)
+  - [Libraries](#libraries)
+  - [Hardware requirements](#hardware-requirements)
+  - [Software requirements](#software-requirements)
+  - [Deployment](#deployment)
+  
 
 # Objectives
 ## Main objective
@@ -171,13 +172,61 @@ The gradient boosting algorithm is an ensemble learning method that combines mul
 - n_estimators: This hyperparameter specifies the number of boosting stages. A larger number of boosting stages can improve performance but may increase training time.
 - learning_rate: This hyperparameter specifies the learning rate used for updating the weights of the weak learners. A smaller learning rate can improve generalization.
 
-## Tools
-### Technologies
+# Results
+## Model Evaluation
+We evaluated the performance of each model using the following metrics:
+- Accuracy: This metric measures the proportion of correctly classified instances.
+- Confusion matrix: This matrix shows the number of true positive, true negative, false positive, and false negative predictions.
+
+The results of the model evaluation are as follows:
+- Logistic regression: The logistic regression model achieved an accuracy of 72.17% on the test set, with the parameters max_iter = 200, solver = 'lbfgs' and the penalty set to 'l2'. The confusion matrix showed that the model struggled with some genres like country, disco and rock. Where the true positives where far less then the rest of the genres.
+
+![LogisticRegression](/app/static/LogisticRegression.png)
+
+- Stochastic gradient descent classifier: The stochastic gradient descent classifier achieved an accuracy of 67.97% on the test set, with the parameters max_iter = 200, a constant learning rate of 0.01, and the penalty set to 'l2'. The confusion matrix showed that the model struggles on the same genres as the logistic regression model, where the true positives of theses genres where even less then the logistic regression model.
+
+![StochasticGradientDescent](/app/static/StochasticGradientDescent.png)
+
+- Random forest classifier: The random forest classifier achieved an accuracy of 78.48% on the test set, with the parameters n_estimators = 81 and max_depth = 10. The confusion matrix showed that the model performed better then the previous models, but still struggled with the genres country and disco. But in general this model preformed better then the previous models.
+
+![RandomForest](/app/static/RandomForest.png)
+
+- Support vector classifier: The support vector classifier achieved an accuracy of 91.99% on the test set, with the parameters C = 10, kernel = 'rbf', and gamma = 'scale'. The confusion matrix showed that the model performed well for most genres, but struggled a bit with the genre country. But so far this model preformed the best of all the models.
+
+![SupportVectorClassifier](/app/static/SupportVectorClassifier.png)
+
+- K-nearest neighbors: The k-nearest neighbors algorithm achieved an accuracy of 91.09% on the test set, with the parameter n_neighbors = 6. The confusion matrix showed that the model performed well for most genres, but struggled with the genre country. But this model preformed almost as good as the support vector classifier.
+
+![KNearestNeighbors](/app/static/KNearestNeighbors.png)
+
+- Decision tree: The decision tree algorithm achieved an accuracy of 66.17% on the test set, with the parameters max_depth = 15, criteriion = 'enthorpy', and the class_weight set to 'balanced'. The confusion matrix showed that the model struggled a lot with the genres country, disco and rock. This model preformes so far the worst of all the models.
+
+![DecisionTree](/app/static/DecisionTree.png)
+
+- Gradient boosting: The gradient boosting algorithm achieved an accuracy of 87.69% on the test set, with the parameters n_estimators = 300, learning_rate = 0.2, and a loss function set to 'log_loss'. The confusion matrix showed that the model performed well for most genres, but struggled with the genre country and rock. This model preformed better then the decision tree model, but not as good as the support vector classifier and the k-nearest neighbors algorithm.
+
+![GradientBoosting](/app/static/GradientBoosting.png)
+
+We've plotted each models accuracy on the training, testing and validation set. The plot shows that the support vector classifier and the k-nearest neighbors algorithm performed the best on the test set, with an accuracy of 91.99% and 91.09% respectively. 
+In the plot we can clearly see that most models tend to overfit on the training set, this you can see by the high accuracy on the training set and the lower accuracy on the test set. Only with the logistic regression model and the stochastic gradient descent classifier this is not the case.
+We can also see that the decision tree model performed the worst on the test set, with an accuracy of 66.17%. The plot gives us a good overview of how each model performed on the different sets.
+
+In the second plot, we've plotted the metrics comparison of each model. The plot shows that the support vector classifier and the k-nearest neighbors algorithm performed the best on the test set, with an accuracy of 91.99% and 91.09% respectively. The plot also shows the differens between the training accuracy and the test accuracy, this shows that most models tend to overfit on the training set. Where the smallest gap between the training accuracy and the test accuracy is with the logistic regression model and the stochastic gradient descent classifier.
+
+![ModelComparison](/app/static/ModelComparison.png)
+
+![ModelComparisonMetrics](/app/static/ModelComparisonMetrics.png)
+
+## Model Secetion
+After 
+
+# Tools
+## Technologies
 In our project, we used the following technologies:
 - Python: We will use Python as the main programming language for our project. 
 - Jupyter Notebook: We will use Jupyter Notebook for data analysis, visualization, and model training.
 
-### Libraries
+## Libraries
 We used the following libraries in our project:
 - Scikit-Learn: We used Scikit-Learn for building and training our machine learning model.
 - Pandas: We used Pandas for data manipulation and preprocessing.
@@ -189,25 +238,30 @@ We used the following libraries in our project:
 - Pickle: We used Pickle for saving and loading our trained model.
 - Streamlit: We used Streamlit to create a user-friendly interface for our model.
 
-### Hardware requirements
+## Hardware requirements
 Our project can be run on a standard laptop or desktop computer. We did not require any specialized hardware for training our model. 
 
-### Software requirements
+## Software requirements
 To run our project, you will need to have Python version 3.12.9 installed on your computer, with the following libraries:
-- Scikit-Learn <--version-->
-- Pandas <--version-->
-- NumPy <--version-->
-- Matplotlib <--version-->
-- Seaborn <--version-->
-- Librosa <--version-->
-- IPython <--version-->
-- Pickle <--version-->
-- Streamlit <--version-->
+- Scikit-Learn
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Librosa
+- IPython
+- Pickle
+- Streamlit
 
-# Results
-## Model Evaluation
+You can install these libraries using the following command:
+```
+pip install -r requirements.txt requirements.training.txt
+```
+## Deployment
+We plan to deploy our music genre classifiation system as a web application using Streamlit. This will allow users to upload an audio file our choose an audio file from a list of pre-selected audio files and get the genre classification. We will also provide a page with the reasearch and analysis of the project, as well as the results and conclusions.
 
-## Model Comparison
-
-## Model Secetion
-
+To ensure consitency and reproducibility, we will use Docker to containerize our application. To build the Docker image, you can use the following command:
+```
+docker compose up -d
+```
+The application will be accessible at http://localhost:8501.
