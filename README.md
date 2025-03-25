@@ -25,12 +25,15 @@ An AI-powered music genre classification system developed by [Simon Stijnen](htt
 - [Results](#results)
   - [Model Evaluation](#model-evaluation)
   - [Model Secetion](#model-secetion)
+- [Conclusion](#conclusion)
+- [Future work](#future-work)
 - [Tools](#tools)
   - [Technologies](#technologies)
   - [Libraries](#libraries)
   - [Hardware requirements](#hardware-requirements)
   - [Software requirements](#software-requirements)
   - [Deployment](#deployment)
+- [References](#references)
   
 
 # Objectives
@@ -218,7 +221,18 @@ In the second plot, we've plotted the metrics comparison of each model. The plot
 ![ModelComparisonMetrics](/app/static/ModelComparisonMetrics.png)
 
 ## Model Secetion
-After 
+After evaluating the performance of each model, we selected the support vector classifier as the best model. The support vector classifier achieved an accuracy of 91.99% on the test set, which was the highest accuracy of all the models we tested. The gap between the training accuracy and the test accuracy was also relatively small, indicating that the model did not overfit on the training set. The confusion matrix showed that the model performed well for most genres, overall the support vector classifier was the best model we tested for classifying music by genre.
+
+# Conclusion
+We can conclude that we have succesfully developed a machine learning model that is capable of accurately classifying music by genre using audio features. Reflecting on our initial objectives, we can conclude that we have largely achieved our main goal of creating a functional genre classification system with good accuracy.
+
+Our model achieved an accuracy of 91.99% on the test set using the support vector classifier. Which is a respectable performance given the complexity of the task and the known limitations of the GTZAN dataset. This level of accuracy demonstrates the potential of machine learning models for music genre classification and suggests that further improvements could be made with more advanced feature extraction techniques and larger datasets.
+
+Our sub-objectives are also largely fulfilled. We have analyzed the GTZAN dataset and gained a better understanding of the features extracted from audio files. We have built a user-friendly interface that allows users to upload an audio file and get the genre classification. We have tested the model with different audio files and evaluated its performance. We have also investigated the possibility of using deep learning models for music genre classification, although we did not implement them in this project.
+
+However, we also encountered some challenges during the project. The GTZAN dataset is relatively small and may not be representative of all music genres. This could limit the generalizability of our model to other datasets. We also found that some genres were more difficult to classify than others, which suggests that further research is needed to improve the performance of the model on these genres.
+
+Overall, we are satisfied with the results of our project and believe that it has the potential to be further developed and improved in the future. We have gained valuable experience in working with audio data and machine learning models, and we look forward to applying this knowledge to future projects.
 
 # Tools
 ## Technologies
@@ -265,3 +279,18 @@ To ensure consitency and reproducibility, we will use Docker to containerize our
 docker compose up -d
 ```
 The application will be accessible at http://localhost:8501.
+
+# References
+- [GTZAN dataset](https://www.kaggle.com/andradaolteanu/gtzan-dataset-music-genre-classification)
+- [GeeksforGeeks](https://www.geeksforgeeks.org/music-genre-classifier-using-machine-learning/)
+- [Kaggle feature extration](https://www.kaggle.com/code/ashishpatel26/feature-extraction-from-audio)
+- [Scikit-Learn documentation](https://scikit-learn.org/stable/documentation.html)
+- [Pandas documentation](https://pandas.pydata.org/docs/)
+- [NumPy documentation](https://numpy.org/doc/)
+- [Matplotlib documentation](https://matplotlib.org/stable/contents.html)
+- [Seaborn documentation](https://seaborn.pydata.org/)
+- [Librosa documentation](https://librosa.org/doc/main/index.html)
+- [IPython documentation](https://ipython.org/documentation.html)
+- [Pickle documentation](https://docs.python.org/3/library/pickle.html)
+- [Streamlit documentation](https://docs.streamlit.io/)
+- [Docker documentation](https://docs.docker.com/)
