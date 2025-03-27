@@ -133,10 +133,9 @@ if file is not None:
     st.header("Interpretation")
 
     with st.spinner("Calculating tempo..."):
-        cols = st.columns(3, border=True)
+        cols = st.columns(2, border=True)
         cols[0].metric("Prediction", prediction.capitalize())
-        cols[1].metric("Confidence", f"{100:.2f}%")
-        cols[2].metric("Tempo", f"{get_tempo(raw_file):.1f} BPM")
+        cols[1].metric("Tempo", f"{get_tempo(raw_file):.1f} BPM")
 
     st.header("Mel-Frequency Cepstral Coefficients (MFCCs)")
     st.write(
