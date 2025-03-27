@@ -37,7 +37,7 @@ showErrorDetails = "type"
 #                 Streamlit Community Cloud) or through st.set_page_config.
 #                 If there are no options left, hide the menu.
 # Default: "auto"
-toolbarMode = "viewer"
+toolbarMode = "auto"
 
 
 [server]
@@ -57,6 +57,10 @@ headless = true
 # Don't use port 3000 which is reserved for internal development.
 # Default: 8501
 # port = 8501
+
+# Max size, in megabytes, for files uploaded with the file_uploader.
+# Default: 200
+maxUploadSize = 3
 
 # Enable serving files from a `static` directory in the running app's
 # directory.
