@@ -46,9 +46,16 @@ def set_selected_tab(tab: int) -> None:
 if TABS_KEY not in st.session_state:
     set_selected_tab(TAB_STATE_UPLOAD)
 
+st.text("Upload an audio sample, select a sample from the dataset, or record audio")
+
 upload_tab, select_tab, input_tab = st.tabs(["Upload", "Select", "Input"])
 
 with upload_tab:
+    st.text("Upload an audio sample of 30 seconds.")
+    st.info(
+        "If the audio is longer than 30 seconds, please trim it first at [Audio Trimmer](https://audiotrimmer.com/)."
+    )
+
     upload_file = st.file_uploader(
         label="Upload an audio sample",
         key="file_uploader",
@@ -58,6 +65,7 @@ with upload_tab:
     upload_file_name = upload_file.name if upload_file is not None else None
 
 with select_tab:
+    st.text("Select a sample from the dataset.")
     files: dict[str, str] = generate_sample_dict(
         DATASET_PATH,
         lambda x: f"{x.split('.', 1)[0].capitalize()} {int(x.split('.', 2)[1])}",
